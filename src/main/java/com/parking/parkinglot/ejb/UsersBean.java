@@ -53,6 +53,7 @@ public class UsersBean {
 
     public void createUser(String username, String email, String password, Collection<String> groups) {
         LOG.info("createUser");
+
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setEmail(email);
@@ -70,5 +71,14 @@ public class UsersBean {
             userGroup.setUserGroup(group);
             entityManager.persist(userGroup);
         }
+    }
+
+    public Collection<String> findUsernamesByUserIds(Collection<Long> userIds){
+        LOG.info("findUsernamesByUserIds");
+
+        List<String> usernames = entityManager.createQuery("SELECT u.username FROM User u WHERE u.id IN :userIds", String.class)
+                .setParameter("userIds", userIds)
+                .getResultList();
+        return usernames;
     }
 }

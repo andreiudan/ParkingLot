@@ -20,7 +20,7 @@
                            aria-current="page" href="${pageContext.request.contextPath}/Cars">Cars</a>--%>
                         <c:if test="${pageContext.request.isUserInRole('READ_CARS')}">
                             <a class="nav-link
-                                ${activePage eq 'Users'?'active':''}"
+                                ${activePage eq 'Cars'?'active':''}"
                                aria-current="page" href="${pageContext.request.contextPath}/Cars">Cars</a>
                         </c:if>
                     </li>

@@ -1,7 +1,9 @@
 package com.parking.parkinglot.ejb;
 
 import com.parking.parkinglot.common.CarDto;
+import com.parking.parkinglot.common.CarPhotoDto;
 import com.parking.parkinglot.entities.Car;
+import com.parking.parkinglot.entities.CarPhoto;
 import com.parking.parkinglot.entities.User;
 import jakarta.ejb.EJBException;
 import jakarta.ejb.Stateless;
@@ -97,5 +99,32 @@ public class CarsBean {
             Car car = entityManager.find(Car.class, carId);
             entityManager.remove(car);
         }
+    }
+
+    public void addPhotoToCar(Long carId, String filename, String fileType, byte[] fileContent) {
+        LOG.info("addPhotoToCar");
+        CarPhoto photo = new CarPhoto();
+        photo.setFileName(filename);
+        photo.setFileType(fileType);
+        photo.setFileContent(fileContent);
+        Car car = entityManager.find(Car.class, carId);
+        if (car.getPhoto() != null) {
+            entityManager.remove(car.getPhoto());
+        }
+        car.setPhoto(photo);
+        photo.setCar(car);
+        entityManager.persist(photo);
+    }
+    public CarPhotoDto findPhotoByCarId(Integer carId) {
+        List<CarPhoto> photos = entityManager
+                .createQuery("SELECT p FROM CarPhoto p WHERE p.car.id = :id", CarPhoto.class)
+                .setParameter("id", carId)
+                .getResultList();
+        if (photos.isEmpty()) {
+            return null;
+        }
+        CarPhoto photo = photos.get(0);
+        return new CarPhotoDto(photo.getId(), photo.getFileName(), photo.getFileType(),
+                photo.getFileContent());
     }
 }

@@ -5,18 +5,18 @@
 <t:pageTamplate pageTitle="Users">
   <h1>Users</h1>
   <form method="POST" action="${pageContext.request.contextPath}/Users">
+    <u:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
+      <a href="${pageContext.request.contextPath}/AddUser" class="btn btn-primary btn-lg">Add user</a>
+    </u:if>
+
+    <button type="submit" class="btn btn-secondary">Invoice</button>
+
     <div class="container text-center">
-      <u:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
-        <a href="${pageContext.request.contextPath}/AddUser" class="btn btn-primary btn-lg">Add user</a>
-      </u:if>
-
-      <button type="submit" class="btn btn-secondary">Invoice</button>
-
       <u:forEach var="user" items="${users}">
-        <div class="col">
-          <input type="checkbox" name="user_ids" value="${user.id}" />
-        </div>
         <div class="row">
+          <div class="col">
+            <input type="checkbox" name="user_ids" value="${user.id}" />
+          </div>
           <div class="col">
               ${user.username}
           </div>
